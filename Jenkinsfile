@@ -13,7 +13,7 @@ pipeline {
       stage("Build image") {
             steps {
                 script {
-                    myapp = docker.build("rushabh21/jenk2:${env.BUILD_ID}")
+                    myapp = docker.build("sandip525/jenk1:${env.BUILD_ID}")
                 }
             }
         }
@@ -21,7 +21,7 @@ pipeline {
       stage("Push image") {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhubid') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
                             myapp.push("latest")
                             myapp.push("${env.BUILD_ID}")
                     }
