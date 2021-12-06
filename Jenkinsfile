@@ -6,38 +6,17 @@ pipeline {
 
     stage('Checkout Source') {
       steps {
-        git url:'https://github.com/rushabhmahale/hellowhale.git', branch:'master'
+        git url:'https://github.com/rushabhmahale/jenkwebui-deployment.git', branch:'master'
       }
     }
-    
-      stage("Build image") {
-            steps {
-                script {
-                    myapp = docker.build("sandip525/jenk1:${env.BUILD_ID}")
-                }
-            }
-        }
-    
-      stage("Push image") {
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                            myapp.push("latest")
-                            myapp.push("${env.BUILD_ID}")
-                    }
-                }
-            }
-        }
-
-    
-    stage('Deploy App') {
-      steps {
-        script {
-          kubernetesDeploy(configs: "hellowhale.yml", kubeconfigId: "mykubeconfig")
-        }
-      }
-    }
-
+    stage('List pods') {
+        withKubeConfig([credentialsId: 'mykubeconfig',
+                    serverUrl: 'https://192.168.99.100:8443',
+                    clusterName: 'minikube',
+                    namespace: 'default'
+                    ]) {
+      sh 'kubectl get pods'
+     }
+   }
   }
-
 }
