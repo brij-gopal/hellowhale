@@ -9,7 +9,7 @@ pipeline {
     stage('Deploy App') {
       steps {
         script {
-          kubernetesDeploy(configs: 'hellodocker.yml', kubeconfigId: "mykubeconfig")
+          kubernetesDeploy(configs: 'hellowhale.yml', kubeconfigId: "mykubeconfig")
         }
       }
     }
